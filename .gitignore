@@ -1,0 +1,5 @@
+.qt_for_python/
+assets/__pycache__/
+assets/config.json
+assets/example.py
+
