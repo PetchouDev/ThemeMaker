@@ -1,8 +1,7 @@
 import asyncio
 import os, sys
 import time
-from PyQt5 import uic, QtWidgets
-import PyQt5
+from PyQt5 import uic, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QDialog, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
 from PyQt5.QtGui import QColor, QImageReader
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -110,7 +109,7 @@ class Updater(QThread):
 class Credits(QDialog):
     def __init__(self) -> None:
         super(Credits, self).__init__()
-        uic.loadUi(fr'assets\ui\getPath.ui', self)
+        uic.loadUi(fr'assets\ui\credits.ui', self)
         self.ok.clicked.connect(self.close)
 
 class mainWindow(QDialog):
@@ -129,6 +128,7 @@ class mainWindow(QDialog):
         self.build.clicked.connect(self.nextStep)
         self.build.setEnabled(False)
         self.folder.clicked.connect(self.directory)
+        self.bug.clicked.connect(self.reportBug)
 
         #get previous datas
         try: 
@@ -149,6 +149,8 @@ class mainWindow(QDialog):
         self.shadowColor.setStyleSheet(f"background-color:#{self.currentShadowColor};")
         self.shadowColor.clicked.connect(self.changeShadowColor)
         
+    def reportBug(self):
+        os.system("@start https://github.com/PetchouDev/ThemeMaker/issues/new")
 
     def updateGUI(self):
 
@@ -345,7 +347,14 @@ if __name__ == '__main__':
     from assets.tools import convert, persona
     from assets.colorpicker import ColorPicker
     app = QApplication([])
-    
+    app.setApplicationName("ThemeMaker for OperaGX")
+    app_icon = QtGui.QIcon()
+    app_icon.addFile('assets\icon.png', QtCore.QSize(16,16))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(24,24))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(32,32))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(48,48))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(256,256))
+    app.setWindowIcon(app_icon)
     try:
         with open("assets\config.json", "r") as test:
             pass

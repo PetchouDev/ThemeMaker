@@ -2,4 +2,7 @@
 assets/__pycache__/
 assets/config.json
 assets/example.py
-
+main.spec
+ThemeMaker.exe 
+build/
+dist/
