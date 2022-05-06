@@ -2,7 +2,7 @@ import asyncio
 import os, sys
 import time
 from PyQt5 import uic, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QDialog, QGraphicsDropShadowEffect, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QFileDialog, QSystemTrayIcon
 from PyQt5.QtGui import QColor, QImageReader
 from PyQt5.QtCore import QThread, pyqtSignal
 import json
@@ -55,7 +55,7 @@ class Setup(QDialog):
         super(Setup, self).__init__() 
         uic.loadUi(r"assets\ui\getPath.ui", self)
         
-    
+        self.setWindowIcon(app_icon)
         print('ui loaded')
         self.ok.clicked.connect(self.returnPath)
 
@@ -110,6 +110,7 @@ class Credits(QDialog):
     def __init__(self) -> None:
         super(Credits, self).__init__()
         uic.loadUi(fr'assets\ui\credits.ui', self)
+        self.setWindowIcon(app_icon)
         self.ok.clicked.connect(self.close)
 
 class mainWindow(QDialog):
@@ -118,6 +119,7 @@ class mainWindow(QDialog):
     def __init__(self) -> None:
         super(mainWindow, self).__init__()
         uic.loadUi(fr'assets\ui\main.ui', self)
+        self.setWindowIcon(app_icon)
         self.thread = Updater()
         self.thread.updater.connect(self.updateGUI)
         self.thread.start()
@@ -291,7 +293,7 @@ class running(QDialog):
     def __init__(self) -> None:
         super(running, self).__init__()
         uic.loadUi(r"assets\ui\running.ui", self)
-
+        self.setWindowIcon(app_icon)
         self.progress.setValue(0)
         self.task.setText("Wainting...")
         self.maker = maker()

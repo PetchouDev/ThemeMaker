@@ -6,3 +6,4 @@ main.spec
 ThemeMaker.exe 
 build/
 dist/
+*.exe

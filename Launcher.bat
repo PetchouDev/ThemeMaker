@@ -1,15 +1,5 @@
 ::[Bat To Exe Converter]
 ::
-::fBE1pAF6MU+EWGLUrBhgekEFFUSyEVb6b5YO7env5uSA4mglcYI=
-::fBE1pAF6MU+EWGLUrBhgekEFFUSyEVb6b5MV5O317ueC+A0+Dt4Ka4rJyYiDIfQb73nAepU4239UjNgwDxRcey6fZgo5rENDvWGXC+6SoBvgRkTJ9E4jCGphlWDVn2U+eNYI
-::fBE1pAF6MU+EWGLUrBhgekEFFUSyEVb6b5MT+uX6+7DH8R9ddusrOJOb+buAM+8f7wWsQ58+33hWnYJs
-::fBE1pAF6MU+EWGLUrBhgekEFFUSyEVb6b5QY7OH16KqVp14SQfA8fZyVlPrOD8tz
-::fBE1pAF6MU+EWGLUrBhgekEGHESyEVb6b4UO5+v+/PnHpEQTXfE3fYu7
-::fBE1pAF6MU+EWGLUrBhge0EGHUSyEVb6b5YO7env5uSA4mglcYI=
-::fBE1pAF6MU+EWGLUrBhge0EGHUSyEVb6b5MV5O317ueC+A0+Dt4Ka4rJyYiDIfQb73nAepU4239UjNgwDxRcey6fZgo5rENDvWGXC+6SoBvgRkTJ9E4jCGphlWDVn2U+eNYI
-::fBE1pAF6MU+EWGLUrBhge0EGHUSyEVb6b5MT+uX6+7DH9BlddusrOJOb+buAM+8f7wWsQ58+33hWnYJs
-::fBE1pAF6MU+EWGLUrBhge0EGHUSyEVb6b5QY7OH16KqVp14SQfA8fZyVlPrOD8tz
-::fBE1pAF6MU+EWGLUrBhge0EGHUSyEVb6b4UO5+v+/PnHpEQTXfE3fYu7
 ::YAwzoRdxOk+EWAjk
 ::fBw5plQjdCyDJGyX8VAjFBZVWAyHAE+1BaAR7ebv/NaErUkYaNY3fYLe97WFJfIv61b3cII+6nNZl8VCBRhXHg==
 ::YAwzuBVtJxjWCl3EqQJgSA==
@@ -23,14 +13,14 @@
 ::egkzugNsPRvcWATEpCI=
 ::dAsiuh18IRvcCxnZtBJQ
 ::cRYluBh/LU+EWAnk
-::YxY4rhs+aU+JeA==
-::cxY6rQJ7JhzQF1fEqQJQ
-::ZQ05rAF9IBncCkqN+0xwdVs0
-::ZQ05rAF9IAHYFVzEqQJQ
+::YxY4rhs+aU+IeA==
+::cxY6rQJ7JhzQF1fEqQJhZks0
+::ZQ05rAF9IBncCkqN+0xwdVsFAlTi
+::ZQ05rAF9IAHYFVzEqQIEIB5ZSSmDN26oZg==
 ::eg0/rx1wNQPfEVWB+kM9LVsJDGQ=
 ::fBEirQZwNQPfEVWB+kM9LVsJDGQ=
 ::cRolqwZ3JBvQF1fEqQJQ
-::dhA7uBVwLU+EWDk=
+::dhA7uBVwLU+EWGmB4EE4Jw5wSRLi
 ::YQ03rBFzNR3SWATElA==
 ::dhAmsQZ3MwfNWATElA==
 ::ZQ0/vhVqMQ3MEVWAtB9wSA==
@@ -41,4 +31,39 @@
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
+@echo off & title %~nx0 & color 07
+
+goto :DOES_PYTHON_EXIST
+
+:DOES_PYTHON_EXIST
+python --version 2>NUL
+if errorlevel 1 goto PYTHON_DOES_NOT_EXIST
+if errorlevel 0 goto PYTHON_DOES_EXIST
+::@pause
+goto :EOF
+
+:PYTHON_DOES_NOT_EXIST
+echo Python is not installed on your system.
+cscript notif.vbs "Can't find Python. Please install it from Microsoft Store and restart the program once done."
+
+@start python
+goto :EOF
+
+
+
+:PYTHON_DOES_EXIST
+:: This will retrieve Python 3.8.0 for example.
+for /f "delims=" %%V in ('python -V') do @set ver=%%V
+echo Found %ver% on system, checking dependencies
+goto :RUN
+
+:RUN
+echo check for dependencies
+::@pause
+python assets\dependencies.py
+echo ready for running program
+::@pause
 python main.py
+echo program exit
+::@pause
+
