@@ -37,8 +37,13 @@ def setup():
     except FileExistsError:
         path = defaultThemeFolder()
     except:
-        path = getPath()+"\themes"
-
+        path = getPath()
+        if path != "":
+            path = path+"\themes"
+        else:
+            os.system("cscript notif.vbs \"Couldn't fetch Opera GX profile directory automaticly, please specify it.")
+            app.exit()
+            quit()
     config = open("assets\config.json", "w")
     json.dump({"path":path, "infos":["", ""]}, config)
     config.close()
