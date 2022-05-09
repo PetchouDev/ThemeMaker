@@ -1,4 +1,4 @@
-# **ThemeMaker for Opera GX**
+# **[ThemeMaker for Opera GX](https://github.com/PetchouDev/ThemeMaker/releases/tag/ThemeMaker)**
 ## Summary
 
 - What is ThemeMaker ?
