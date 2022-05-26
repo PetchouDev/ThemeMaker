@@ -4,17 +4,16 @@ import moviepy.editor as mp
 def convert(video:str, output:str):
     """Create a webm file from a video file"""
     clip = mp.VideoFileClip(video)
-    clip.write_videofile(output)
+    clip.write_videofile(output, bitrate='3000K', audio=False)
 
 def rgba2hex(r:int, g:int, b:int, a:int):
     """Convert rgba color to its hex"""
     return '#{:02x}{:02x}{:02x}{:02x}'.format( r, g , b, a)
 
-def persona(name:str, author:str, url:str, version:int, photo:str, video:str, textColor:str, shadowColor:str)->str:
+def persona(name:str, author:str, url:str, version:int, photoFormat:str, video:str, textColor:str, shadowColor:str)->str:
     """returns the persona.ini file content"""
     if video != "":
-        return f"""
-[Info]
+        return f"""[Info]
 name = {name}
 author = {author}
 url = {url}
@@ -25,20 +24,31 @@ background = video.webm
 position = center center
 title text color = #{textColor}
 title text shadow = #{shadowColor}
-first frame image = image.png
+first frame image = image.{photoFormat}
+
+[Web UI Pages]
+background = video.webm
+position = center center
+title text color = #{textColor}
+title text shadow = #{shadowColor}
+first frame image = image.{photoFormat}
 """
     else:
-        return f"""
-[Info]
+        return f"""[Info]
 name = {name}
 author = {author}
 url = {url}
 version = {version}
 
 [Start Page]
-background = image.png
+background = image.{photoFormat}
 position = center center
 title text color = #{textColor}
 title text shadow = #{shadowColor}
 
+[Web UI Pages]
+background = image.{photoFormat}
+position = center center
+title text color = #{textColor}
+title text shadow = #{shadowColor}
 """
