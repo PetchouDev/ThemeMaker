@@ -4,7 +4,7 @@ import moviepy.editor as mp
 def convert(video:str, output:str):
     """Create a webm file from a video file"""
     clip = mp.VideoFileClip(video)
-    clip.write_videofile(output, bitrate='3000K', audio=False)
+    clip.write_videofile(output)
 
 def rgba2hex(r:int, g:int, b:int, a:int):
     """Convert rgba color to its hex"""
