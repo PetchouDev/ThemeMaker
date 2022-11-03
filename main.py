@@ -1,5 +1,4 @@
 import asyncio
-from msilib import type_string
 import os, sys
 import time
 from PyQt5 import uic, QtGui, QtCore
@@ -11,8 +10,10 @@ import shutil
 from zipfile import ZipFile
 import moviepy.editor as mp
 
+
 global datas
 datas = {}
+
 
 
 def defaultThemeFolder() -> str:
@@ -31,34 +32,40 @@ def setup():
     except:
         path = getPath()
         if path != "":
-            path = path + "\themes"
+            path = path+"\themes"
         else:
             os.system("cscript notif.vbs \"Couldn't fetch Opera GX profile directory automaticly, please specify it.")
             app.exit()
             quit()
     config = open("assets\config.json", "w")
-    json.dump({"path": path, "infos": ["", ""]}, config)
+    json.dump({"path":path, "infos":["", ""]}, config)
     config.close()
 
 
+
+
+
+
 class Setup(QDialog):
-
+    
     def __init__(self):
-
-        super(Setup, self).__init__()
+        
+        super(Setup, self).__init__() 
         uic.loadUi(r"assets\ui\getPath.ui", self)
-
+        
         self.setWindowIcon(app_icon)
         print('ui loaded')
         self.ok.clicked.connect(self.returnPath)
 
+        
+
     def seemsCorrect(self):
         if ("Opera GX Stable" and "C:") in self.path.text():
-            # self.ok.setEnabled = True
+            #self.ok.setEnabled = True
             print('ok')
             return True
         else:
-            # self.ok.setEnabled = False
+            #self.ok.setEnabled = False
             return False
 
     def returnPath(self):
@@ -66,7 +73,7 @@ class Setup(QDialog):
             global userPath
             userPath = self.path.text()
             self.close()
-        else:
+        else: 
             print('Not ok')
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
@@ -77,10 +84,8 @@ class Setup(QDialog):
                                 \n You can find this path by opening Opera GX, then typing opera://about in the search bar. Then copy the path named Profile.""")
             msg.exec()
 
-
 global userPath
 userPath = ""
-
 
 def getPath():
     global userPath
@@ -90,14 +95,13 @@ def getPath():
     del window
     return userPath
 
-
 class Updater(QThread):
     updater = pyqtSignal()
-
     def run(self):
         while True:
             self.updater.emit()
             time.sleep(0.3)
+            
 
 
 class Credits(QDialog):
@@ -107,11 +111,9 @@ class Credits(QDialog):
         self.setWindowIcon(app_icon)
         self.ok.clicked.connect(self.close)
 
-
 class mainWindow(QDialog):
     currentTextColor = "ffffff"
     currentShadowColor = "ffffff"
-
     def __init__(self) -> None:
         super(mainWindow, self).__init__()
         uic.loadUi(fr'assets\ui\main.ui', self)
@@ -128,12 +130,12 @@ class mainWindow(QDialog):
         self.folder.clicked.connect(self.directory)
         self.bug.clicked.connect(self.reportBug)
 
-        # get previous datas
-        try:
+        #get previous datas
+        try: 
             with open("assets\config.json", "r") as save:
                 datas = json.load(save)
             datas = datas["infos"]
-            # attribuer les infos
+            #attribuer les infos
             self.themeName.setText(datas[0])
             self.author.setText(datas[1])
             self.version.setText(str(datas[2]))
@@ -146,37 +148,35 @@ class mainWindow(QDialog):
         self.textColor.clicked.connect(self.changeTextColor)
         self.shadowColor.setStyleSheet(f"background-color:#{self.currentShadowColor};")
         self.shadowColor.clicked.connect(self.changeShadowColor)
-
+        
     def reportBug(self):
         os.system("@start https://github.com/PetchouDev/ThemeMaker/issues/new")
 
     def updateGUI(self):
 
         version_ok = False
-        try:
+        try :
             int(self.version.text())
             version_ok = True
         except:
             version_ok == False
-
-        if (self.author.text() == "") or (self.version.text() == "") or (not version_ok) or (
-                self.themeName.text() == "") or (self.photoPath.text() == ""):
+        
+        if (self.author.text() == "") or (self.version.text() == "") or (not version_ok) or (self.themeName.text() == "") or (self.photoPath.text() == ""):
             self.build.setEnabled(False)
-
-        else:
+            
+        else: 
             self.build.setEnabled(True)
+            
 
     def findPicture(self):
         supportedFormats = QImageReader.supportedImageFormats()
         text_filter = "Images ({})".format(" ".join(["*.{}".format(fo.data().decode()) for fo in supportedFormats]))
-        filename = QFileDialog.getOpenFileName(self, "Choose your main wallpaper",
-                                               fr"C:\Users\{os.getlogin()}\Pictures", text_filter)
+        filename = QFileDialog.getOpenFileName(self, "Choose your main wallpaper", fr"C:\Users\{os.getlogin()}\Pictures", text_filter)
         self.photoPath.setText(filename[0])
 
     def findVideo(self):
         text_filter = "Videos ({*.mov *.mp4 *.wmv *.avi *.avchd *.flv *.f4v *.swf *.mkv *.webm})"
-        filename = QFileDialog.getOpenFileName(self, "Choose your main wallpaper", fr"C:\Users\{os.getlogin()}\Videos",
-                                               text_filter)
+        filename = QFileDialog.getOpenFileName(self, "Choose your main wallpaper", fr"C:\Users\{os.getlogin()}\Videos", text_filter)
         self.videoPath.setText(filename[0])
 
     def seeCredits(self):
@@ -196,7 +196,7 @@ class mainWindow(QDialog):
         datas["sc"] = self.currentShadowColor
         with open("assets\config.json", "r") as file:
             config = json.load(file)
-        config["infos"] = [datas["name"], datas["author"], datas["version"], datas["url"], datas["tc"], datas["sc"]]
+        config["infos"] = [datas["name"], datas["author"], datas["version"], datas["url"], datas["tc"], datas["sc"] ]
         with open("assets\config.json", "w") as nexConfig:
             json.dump(config, nexConfig)
         self.close()
@@ -252,18 +252,16 @@ class maker(QThread):
                 print('Video done !')
                 asyncio.sleep(1)
                 self.updater.emit(40, "writing persona.ini file")
-            open("persona.ini", "w").write(
-                persona(self.datas["name"], self.datas["author"], self.datas["url"], self.datas["version"],
-                        pictureFormat, self.datas["video"], self.datas["tc"], self.datas["sc"]))
+            open("persona.ini", "w").write(persona(self.datas["name"], self.datas["author"], self.datas["url"], self.datas["version"], pictureFormat, self.datas["video"], self.datas["tc"], self.datas["sc"]))
             time.sleep(0.5)
             self.updater.emit(50, "Building archive for theme.")
-            # shutil.make_archive(self.datas["name"], format='zip', root_dir='.')
+            #shutil.make_archive(self.datas["name"], format='zip', root_dir='.')
             files = os.listdir()
             archive = ZipFile("archive.zip", "w")
             print(os.listdir())
             for file in files:
                 archive.write(file)
-                print(file + " added to package")
+                print(file+" added to package")
 
             archive.close()
 
@@ -273,12 +271,12 @@ class maker(QThread):
             time.sleep(2)
             self.updater.emit(85, "Moving theme to Opera GX themes folder.")
             name = self.datas['name'].replace(" ", "-")
-            shutil.copyfile("archive.zip", config["path"] + f"\{name}.zip")
+            shutil.copyfile("archive.zip", config["path"]+f"\{name}.zip")
             time.sleep(1)
             self.updater.emit(95, "Clearing things up.")
             for file in os.listdir():
                 os.remove(file)
-                print(file + " added to package")
+                print(file+" added to package")
             time.sleep(1)
             os.chdir("..\..\ ".replace(" ", ""))
             try:
@@ -287,12 +285,11 @@ class maker(QThread):
                 pass
             print("temporary folder removed successfully")
             self.updater.emit(100, "All Done.")
-
-
+            
+            
 
         except Exception as error:
             self.error.emit("An error occured, please check your entries.", str(error))
-
 
 class running(QDialog):
     def __init__(self) -> None:
@@ -305,6 +302,7 @@ class running(QDialog):
         self.maker.error.connect(self.error)
         self.maker.updater.connect(self.update)
         self.maker.start()
+
 
     def update(self, value, task):
         self.progress.setValue(value)
@@ -329,14 +327,13 @@ class running(QDialog):
         msg.exec()
         self.close()
 
-
 def main():
     while True:
         window = mainWindow()
         window.exec()
         del window
         global datas
-        if datas["photo"] == "{}" or str(datas["version"]) == "" or datas["author"] == "{}" or datas["name"] == "{}":
+        if datas == {}:
             app.exit()
             quit()
         window = running()
@@ -346,6 +343,7 @@ def main():
 
 if __name__ == '__main__':
 
+
     if getattr(sys, 'frozen', False):
         application_path = sys._MEIPASS
     else:
@@ -353,22 +351,22 @@ if __name__ == '__main__':
     os.chdir(application_path)
     from assets.tools import convert, persona
     from assets.colorpicker import ColorPicker
-
     app = QApplication([])
     app.setApplicationName("ThemeMaker for OperaGX")
     app_icon = QtGui.QIcon()
-    app_icon.addFile('assets\icon.png', QtCore.QSize(16, 16))
-    app_icon.addFile('assets\icon.png', QtCore.QSize(24, 24))
-    app_icon.addFile('assets\icon.png', QtCore.QSize(32, 32))
-    app_icon.addFile('assets\icon.png', QtCore.QSize(48, 48))
-    app_icon.addFile('assets\icon.png', QtCore.QSize(256, 256))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(16,16))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(24,24))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(32,32))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(48,48))
+    app_icon.addFile('assets\icon.png', QtCore.QSize(256,256))
     app.setWindowIcon(app_icon)
     try:
         with open("assets\config.json", "r") as test:
             pass
     except:
         setup()
-
+    
     main()
+
 
 # button2.setStyleSheet("background-color:#ffffff;"

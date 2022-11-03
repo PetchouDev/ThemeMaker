@@ -1,9 +1,22 @@
+# root dir exclusions
+.idea/
 .qt_for_python/
-assets/__pycache__/
+main.spec
+
+# assets exclusions
 assets/config.json
 assets/example.py
-main.spec
-ThemeMaker.exe 
+
+# compilation exclusions
 build/
 dist/
 *.exe
+
+# test exclusions
+assets/temps/
+
+# __pycache__ exclusions
+__pycache__/
+assets/__pycache__
+assets/colorpicker/__pycache__/
+assets/colorpicker/ui/__pycache__/
